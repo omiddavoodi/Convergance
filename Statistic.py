@@ -1,17 +1,59 @@
 
+class elementType:
+    entity = 1
+    process = 2
+    delay = 3
+    resource = 4
+    queue = 5
+
+
 class Statistic:
     lastTick = 0
-    Entity = {}
+    obj = {}
+    lastUniqueId = 0
 
     def __init__(self):
         pass
 
-    def registerEntity(self):
+    def registerEntity(self, enType=None, enName=''):
+        if enType:
+            self.lastUniqueId += 1
+            self.obj[self.lastUniqueId] = {
+                'name': enName,
+                'type': enType
+            }
+
+            if enType == elementType.entity:
+                self.obj[self.lastUniqueId]['lastDelayTick'] = 0
+                self.obj[self.lastUniqueId]['delay'] = []
+
+            elif enType == elementType.process:
+                self.obj[self.lastUniqueId]['lastDelayTick'] = 0
+                self.obj[self.lastUniqueId]['delay'] = []
+
+            elif enType == elementType.delay:
+                self.obj[self.lastUniqueId]['lastDelayTick'] = 0
+
+            elif enType == elementType.resource:
+                self.obj[self.lastUniqueId]['queue'] = []
+                self.obj[self.lastUniqueId]['queueTick'] = []
+                self.obj[self.lastUniqueId]['serviceLength'] = []
+
+            elif enType == elementType.queue:
+                self.obj[self.lastUniqueId]['len'] = []
+                self.obj[self.lastUniqueId]['lenTick'] = []
+
+
+            return self.lastUniqueId
+
+        return None
+
+    def signal(self, enId=None, **kwargv):
         pass
 
-    def signalEntity(self):
-        pass
 
+    def end(self):
+        pass
 
 if __name__ == "__main__":
     entity = {
