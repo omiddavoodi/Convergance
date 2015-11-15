@@ -4,8 +4,10 @@ from convergance_actor_disposer import Disposer
 from convergance_actor_branch import Branch
 from convergance_actor_delay import Delay
 from convergance_entity import Entity
+from randomNumber import RANDINT, NumberGenerator
 import random
 
+a = NumberGenerator(RANDINT, a=1, b=2)
 def randomInterval():
     return random.randint(1,2)
 

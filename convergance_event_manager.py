@@ -19,6 +19,7 @@ class EventManager:
     def addevent(self, tick, function, data=None):
         if (data == None):
             self.queue.put_nowait(TupleSortingOn0((tick, function)))
+        
         else:
             self.queue.put_nowait(TupleSortingOn0((tick, function, data)))
             

@@ -22,6 +22,7 @@ class Generator(Actor):
             ent = self.entitytype(self.entitycreationdata)
             if (self.logs):
                 print(self.name + ": Created Entity at Tick:" + str(self.simulation.tick))
+            
             self.destination.enter(ent)
             self.simulation.eventmanager.addevent(self.simulation.tick + self.intervalfunction(), self.create)
 

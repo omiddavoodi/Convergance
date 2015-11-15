@@ -22,14 +22,15 @@ class Queue(Actor):
     def act(self, entity, data=None):
         if (self.logs):
             print(self.name + ": Dequeued to " + data.name + " at Tick:" + str(self.simulation.tick))
+        
         data.enter(entity)
         Actor.leave(self, entity)
 
     def enter(self, entity):
         if (self.logs):
             print(self.name + ": Enqueued at Tick:" + str(self.simulation.tick))
+
         Actor.enter(self, entity)
-        
         for i in self.destinations:
             if (i.accepts_new):
                 if (len(self.entities)):

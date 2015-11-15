@@ -12,6 +12,7 @@ class Disposer(Actor):
     def act(self, entity, data=None):
         if (self.logs):
             print(self.name + ": Disposed Entity at Tick:" + str(self.simulation.tick))
+        
         Actor.leave(self, entity)
         del entity
 

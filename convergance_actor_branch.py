@@ -16,5 +16,6 @@ class Branch(Actor):
     def enter(self, entity):
         if (self.logs):
             print(self.name + ": Decided at Tick:" + str(self.simulation.tick))
+        
         Actor.enter(self, entity)
         self.act(entity)

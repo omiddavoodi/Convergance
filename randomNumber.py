@@ -12,6 +12,7 @@ NORMAL = 9
 VONMISES = 10
 PARETO = 11
 WEIBULL = 12
+RANDINT = 13
 
 gens = {
     RANDOM: {
@@ -94,6 +95,13 @@ gens = {
             'beta': 0.1
         }
     },
+    RANDINT: {
+        'name': 'randint',
+        'args': {
+            'a': 0,
+            'b': 2
+        }
+    }
 }
 
 class NumberGenerator():
@@ -113,12 +121,15 @@ class NumberGenerator():
 
 
 if __name__ == "__main__":
-    a = Generator()
+    a = NumberGenerator()
     print(a.next())
 
-    a = Generator(TRIANGULAR, low=2, mode=3, high=90)
+    a = NumberGenerator(TRIANGULAR, low=2, mode=3, high=90)
     print(a.next())
 
-    a = Generator(NORMAL, mu=0.4, sigma=3)
+    a = NumberGenerator(NORMAL, mu=0.4, sigma=3)
+    print(a.next())
+
+    a = NumberGenerator(RANDINT, a=0, b=3)
     print(a.next())
 

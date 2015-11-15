@@ -14,14 +14,17 @@ class Delay(Actor):
         Actor.leave(self, data)
         if (self.maxentities != 0 and self.maxentities > len(self.entities)):
             self.accepts_new = True
+        
         if (self.logs):
             print(self.name + ": Delay ended at Tick:" + str(self.simulation.tick))
+        
         self.destination.enter(data)
             
     def act(self, entity, data=None):
         interval = self.delayinterval(self.delayintervaldata)
         if (self.logs):
             print(self.name + ": Delays Entity for interval " + str(interval) + " at Tick:" + str(self.simulation.tick))
+        
         self.simulation.eventmanager.addevent(self.simulation.tick + interval, self.enddelay, entity)
                 
 
@@ -30,6 +33,7 @@ class Delay(Actor):
             print("Error: Entered into Delay when accepts_new = False")
             self.simulation.error = True
             return
+        
         Actor.enter(self, entity)
         self.act(entity)
         if (self.maxentities != 0 and self.maxentities <= len(self.entities)):
