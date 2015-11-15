@@ -11,7 +11,6 @@ class TupleSortingOn0(tuple):
         return self[0] >= rhs[0]
 
 class EventManager:
-
     queue = PriorityQueue()
     
     def __init_(self):

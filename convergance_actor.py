@@ -1,11 +1,6 @@
 class Actor:
-
-    
-    
-    
     name = "Unnamed"
-    
-    
+
     def __init__(self):
         self.entities = []
         self.accepts_new = True

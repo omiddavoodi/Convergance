@@ -34,4 +34,3 @@ class Queue(Actor):
             if (i.accepts_new):
                 if (len(self.entities)):
                     self.act(self.entities[-1], i)
-        
