@@ -23,8 +23,8 @@ class Queue(Actor):
         if (self.logs):
             print(self.name + ": Dequeued to " + data.name + " at Tick:" + str(self.simulation.tick))
         
-        data.enter(entity)
         Actor.leave(self, entity)
+        data.enter(entity)
 
     def enter(self, entity):
         if (self.logs):

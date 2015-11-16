@@ -1,10 +1,20 @@
+import enum
+import turtle
 
-class elementType:
+class elementType(enum.Enum):
     entity = 1
     process = 2
     delay = 3
     resource = 4
     queue = 5
+
+
+class baseEntity:
+    name = ''
+    type = ''
+
+class entity(baseEntity):
+    lastDelayTick = 0
 
 
 class Statistic:
@@ -26,6 +36,8 @@ class Statistic:
             if enType == elementType.entity:
                 self.obj[self.lastUniqueId]['lastDelayTick'] = 0
                 self.obj[self.lastUniqueId]['delay'] = []
+                self.obj[self.lastUniqueId]['createTime'] = 0
+                self.obj[self.lastUniqueId]['disposeTime'] = 0
 
             elif enType == elementType.process:
                 self.obj[self.lastUniqueId]['lastDelayTick'] = 0
@@ -63,12 +75,12 @@ if __name__ == "__main__":
     queue = []
     totalQueue = 0
     delayQueue = []
+    inQueue = [(0 ,0)] # (tick, len)
 
     startTick = 0
     endTick = 0
 
-    f = open('logs.txt')
-    for line in f:
+    for line in open('logs.txt'):
         line = line.split(':')
         if line[0] in entity:
             line[1] = line[1].split()
@@ -79,10 +91,18 @@ if __name__ == "__main__":
             line[1] = line[1].split()
             if line[1][0] == 'Enqueued':
                 queue.append(float(line[-1]))
+                inQueue.append((float(line[-1]), inQueue[-1][1] + 1))
 
             elif line[1][0] == 'Dequeued':
-                totalQueue += float(line[-1]) - queue[0]
-                delayQueue.append(float(line[-1]) - queue[0])
+                lastDelay = float(line[-1]) - queue[0]
+                if lastDelay == 0:
+                    inQueue.pop()
+
+                else:
+                    inQueue.append((float(line[-1]), inQueue[-1][1] - 1))
+
+                totalQueue += lastDelay
+                delayQueue.append(lastDelay)
                 del queue[0]
 
         elif line[0] == 'Simulation started':
@@ -100,6 +120,7 @@ if __name__ == "__main__":
     step = 10
     index = 0
     tmp = 0
+    queueTimeList = []
     while index < len(delayQueue):
         if s <= delayQueue[index] <= (s + step):
             tmp += 1
@@ -107,9 +128,61 @@ if __name__ == "__main__":
         else:
             print("N.O. of Delay in [%d, %d): %d" % (s, s + step, tmp))
             s += step
+            queueTimeList.append(tmp)
             tmp = 0
 
         index += 1
 
     for i in entity:
         print('Utilization for ' + i + ": " + str(sum(entity[i])/(endTick - startTick)) + " : " + str(len(entity[i])))
+
+    t = turtle.Turtle()
+    turtle.delay(0)
+    t.speed(0)
+    t.hideturtle()
+    t.pensize(4)
+    t.pu()
+    t.goto(-300, -200)
+    t.pd()
+    t.fd(600)
+    t.pu()
+    t.goto(-300, -200)
+    t.pd()
+    t.goto(-300, +200)
+    t.pu()
+    t.pensize(2)
+    t.pencolor('red')
+    t.goto(-280, +180)
+    t.write("Queue Delay", align='left', font=('Times New Roman', 16))
+    t.goto(-300, -200)
+    t.pd()
+
+    length = 400 / max(queueTimeList)
+    maximum = 600 / len(queueTimeList)
+
+    for i in range(len(queueTimeList)):
+        t.goto(i * maximum - 280, queueTimeList[i] * length - 200)
+        t.write(str((i, queueTimeList[i])), align='left', font=('Times New Roman', 10))
+
+
+    t.pu()
+    t.pensize(2)
+    t.pencolor('blue')
+    t.goto(-280, +150)
+    t.write("Queue Length", align='left', font=('Times New Roman', 16))
+    t.goto(-300, -200)
+    t.pd()
+
+
+    mx = 0
+    for i in inQueue:
+        if i[-1] > mx:
+            mx = i[-1]
+
+    length = 400 / mx
+    maximum = 600 / inQueue[-1][0]
+
+    for i in inQueue:
+        t.goto(i[0] * maximum - 280, i[1] * length - 200)
+
+    turtle.done()

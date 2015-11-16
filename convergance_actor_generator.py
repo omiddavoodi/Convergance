@@ -23,6 +23,9 @@ class Generator(Actor):
             if (self.logs):
                 print(self.name + ": Created Entity at Tick:" + str(self.simulation.tick))
             
+            if (self.actorprobe):
+                self.actorprobe.logleave(self.simulation.tick)
+            
             self.destination.enter(ent)
             self.simulation.eventmanager.addevent(self.simulation.tick + self.intervalfunction(), self.create)
 

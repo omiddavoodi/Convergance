@@ -45,3 +45,6 @@ class Simulation:
     def addactor(self, actor):
         self.actors.append(actor)
         actor.simulation = self
+    
+    def addprobe(self, probe):
+        probe.simulation = self
