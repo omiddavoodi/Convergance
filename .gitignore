@@ -43,3 +43,5 @@ Temporary Items
 .apdisk
 .idea/
 __pycache__/
+*.pyc
+*pycache*/
