@@ -30,18 +30,18 @@ class Simulation:
             print("Simulation finished: " + str(self.tick))
 
     def loop(self):
+        #print('loop')
         event = self.eventmanager.getevent()
         if event == None:
             self.finished = True
             return
 
-        self.tick = event[0]
+        self.tick = event[0] 
         if (len(event) == 2):
             event[1]()
-        
         else:
             event[1](event[2])
-            
+           
     def addactor(self, actor):
         self.actors.append(actor)
         actor.simulation = self

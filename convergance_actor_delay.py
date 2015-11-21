@@ -11,12 +11,17 @@ class Delay(Actor):
         self.name = "Delay"
         
     def enddelay(self, data):
-        Actor.leave(self, data)
-        if (self.maxentities != 0 and self.maxentities > len(self.entities)):
-            self.accepts_new = True
         
         if (self.logs):
             print(self.name + ": Delay ended at Tick:" + str(self.simulation.tick))
+        
+        if (self.maxentities != 0 and self.maxentities > len(self.entities) - 1):
+            self.accepts_new = True
+        
+        Actor.leave(self, data)
+        
+        
+        
         
         self.destination.enter(data)
             
@@ -33,7 +38,7 @@ class Delay(Actor):
             print("Error: Entered into Delay when accepts_new = False")
             self.simulation.error = True
             return
-        
+            
         Actor.enter(self, entity)
         self.act(entity)
         if (self.maxentities != 0 and self.maxentities <= len(self.entities)):

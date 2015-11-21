@@ -1,6 +1,45 @@
 import enum
 import turtle
 
+def drawProbs(list, lastTick, title):
+    my = 0
+    for i in list:
+        if i[-1] > my:
+            my = i[-1]
+    if my == 0:
+        print("empty probe")
+        return 
+    
+    t = turtle.Turtle()
+    turtle.delay(0)
+    t.speed(0)
+    t.hideturtle()
+    t.pensize(4)
+    t.pu()
+    t.goto(-300, -200)
+    t.pd()
+    t.fd(600)
+    t.pu()
+    t.goto(-300, -200)
+    t.pd()
+    t.goto(-300, +200)
+    t.pu()
+    t.pensize(2)
+    t.pencolor('red')
+    t.goto(-280, +180)
+    t.write(title, align='left', font=('Times New Roman', 16))
+    t.goto(-300, -200)
+    t.pd()
+    
+    length = 400 / my
+    maximum = 600 / lastTick
+    
+    for i in list:
+        t.goto(i[0] * maximum - 280, i[1] * length - 200)
+        # t.write(str((i, [i])), align='left', font=('Times New Roman', 10))
+
+    turtle.done()
+
 class elementType(enum.Enum):
     entity = 1
     process = 2

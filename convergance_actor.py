@@ -8,8 +8,10 @@ class Actor:
         self.simulation = None
         self.logs = False
         self.actorprobe = None
+        self.actorenterprobe = None
+        self.actorleaveprobe = None
     
-    def act(self, entity, data=None):
+    def act(self, entity, data = None):
         pass
 
     def enter(self, entity):
@@ -18,6 +20,8 @@ class Actor:
         self.entities.append(entity)
         if (self.actorprobe):
             self.actorprobe.logenter(self.simulation.tick, entity)
+        if (self.actorenterprobe):
+            self.actorenterprobe.logenter(self.simulation.tick, entity)
 
     def leave(self, entity):
         self.entities.remove(entity)
@@ -26,6 +30,8 @@ class Actor:
             i(entity)
         if (self.actorprobe):
             self.actorprobe.logleave(self.simulation.tick, entity)
+        if (self.actorleaveprobe):
+            self.actorleaveprobe.logleave(self.simulation.tick, entity)
 
     def start(self):
         pass
