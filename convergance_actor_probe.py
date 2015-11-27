@@ -1,11 +1,11 @@
 class ActorProbe:
     
     
-    
     def __init__(self, actor):
         self.enters = []
         self.leaves = []
         self.delays = []
+        self.failures = []
         self.numentities = {}
         self.actor = actor
         self.simulation = None
@@ -25,6 +25,12 @@ class ActorProbe:
         self.numentities[tick] = len(self.actor.entities)
         if (self.logs):
             print("Logged Leave At " + str(tick) + " for " + self.name + " with len " + str(len(self.actor.entities)))
+
+    def logfailure(self, tick):
+        self.failures.append(tick)
+        if (self.logs):
+            print("Logged Failure At " + str(tick) + " for " + self.name)
+
     
     def calculatestatistics(self):
         ne = [i for i in self.numentities.items()]

@@ -8,9 +8,9 @@ class Branch(Actor):
         self.branchfunction = branchfunction
         self.name = "Branch"
         
-    def act(self, entity, data=None):
+    def act(self, entity):
         Actor.leave(self, entity)
-        nextactor = self.branchactors[self.branchfunction(data)]
+        nextactor = self.branchactors[self.branchfunction(entity)]
         nextactor.enter(entity)
 
     def enter(self, entity):

@@ -1,5 +1,5 @@
 from convergance import Simulation
-from convergance_actor_generator import Generator
+from convergance_actor_generator import AutomaticGenerator
 from convergance_actor_disposer import Disposer
 from convergance_actor_delay import Delay
 from convergance_actor_queue import Queue
@@ -41,7 +41,7 @@ pr2.name = 'Delay Probe'
 dl1.actorprobe = pr2
 
 
-g1 = Generator(q1, Entity, None, INTERVAL_RATE.next, 200)
+g1 = AutomaticGenerator(q1, Entity, None, INTERVAL_RATE.next, 200)
 g1.logs = True
 
 sim = Simulation()
