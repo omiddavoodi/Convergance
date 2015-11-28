@@ -8,9 +8,7 @@ from convergance_actor_branch import Branch
 from convergance_actor_storage import Storage
 from convergance_actor_event_generator import EventGenerator
 from convergance_random_number import NORMAL, UNIFORM, RANDINT, TRIANGULAR, NumberGenerator
-from convergance_statistic import drawProbs
-
-
+from convergance_statistic import drawProbs, drawLeaveEnter
 
 UNSOLD = 0
 SOLD = 1
@@ -124,7 +122,10 @@ sim.addprobe(pr3)
 
 sim.start()
 
-
+drawLeaveEnter(pr1.enters, 'Sold')
+drawLeaveEnter(pr2.enters, 'Recycled')
+drawLeaveEnter(pr3.failures, 'Lost Opportunity')
+#drawLeaveEnter(pr4.leaves, 'Newspapers Generated')
 print("Sold:",len(pr1.enters))
 print("Recycled:",len(pr2.enters))
 print("Lost Opportunity:",len(pr3.failures))
