@@ -11,6 +11,9 @@ def drawLeaveEnter(list, title):
         print("empty probe")
         return
 
+    length = 400 / len(list)
+    maximum = 600 / max(list)
+
     t = turtle.Turtle()
     turtle.delay(0)
     t.speed(0)
@@ -26,14 +29,12 @@ def drawLeaveEnter(list, title):
     t.goto(-300, +200)
     t.pu()
     t.pensize(2)
-    t.pencolor('red')
-    t.goto(-280, +180)
-    t.write(title, align='left', font=('Times New Roman', 16))
+    t.pencolor('black')
+    t.goto(-280, +195)
+    t.write("%s: [%d:%d]" % (title, len(list), max(list)), align='left', font=('Times New Roman', 16))
     t.goto(-300, -200)
+    t.pencolor('red')
     t.pd()
-
-    length = 400 / len(list)
-    maximum = 600 / max(list)
 
     num = 0
     for i in list:
@@ -45,8 +46,6 @@ def drawLeaveEnter(list, title):
 
     turtle.done()
 
-    pass
-
 def drawProbs(list, lastTick, title):
     my = 0
     for i in list:
@@ -55,7 +54,10 @@ def drawProbs(list, lastTick, title):
     if my == 0:
         print("empty probe")
         return 
-    
+
+    length = 400 / my
+    maximum = 600 / lastTick
+
     t = turtle.Turtle()
     turtle.delay(0)
     t.speed(0)
@@ -71,14 +73,12 @@ def drawProbs(list, lastTick, title):
     t.goto(-300, +200)
     t.pu()
     t.pensize(2)
-    t.pencolor('red')
-    t.goto(-280, +180)
-    t.write(title, align='left', font=('Times New Roman', 16))
+    t.pencolor('black')
+    t.goto(-280, +195)
+    t.write("%s: [%d:%d]" % (title, my, lastTick), align='left', font=('Times New Roman', 16))
     t.goto(-300, -200)
+    t.pencolor('red')
     t.pd()
-    
-    length = 400 / my
-    maximum = 600 / lastTick
     
     for i in list:
         t.goto(i[0] * maximum - 300, i[1] * length - 200)
