@@ -5,75 +5,107 @@ from convergance_actor_delay import Delay
 from convergance_actor_queue import Queue
 from convergance_entity import Entity
 from convergance_actor_probe import ActorProbe
+from convergance_actor_branch import Branch
 from convergance_random_number import NORMAL, UNIFORM, RANDINT, TRIANGULAR, NumberGenerator
 from convergance_statistic import drawProbs
 
-INTERVAL_RATE = NumberGenerator(UNIFORM, a=3, b=4)
+INTERVAL_RATE = NumberGenerator(UNIFORM, a=1, b=2)
 DELAY_RATE_1 = NumberGenerator(TRIANGULAR, low=5, high=6, mode=9)
 DELAY_RATE_2 = NumberGenerator(UNIFORM, a=1, b=2)
+DELAY_RATE_3 = NumberGenerator(UNIFORM, a=3, b=5)
 
 d1 = Disposer()
 d1.logs = True
 
-dl1 = Delay(d1, DELAY_RATE_1.next, None, 1)
-dl1.name = 'Delay 2'
-dl1.logs = True
+########################################################
 
-pr1 = ActorProbe(dl1)
-pr1.name = 'Probe Delay 2'
-dl1.actorprobe = pr1
+dl4 = Delay(d1, DELAY_RATE_1.next, None, 1)
+dl4.name = 'Delay 4'
+dl4.logs = True
 
-q1 = Queue([dl1])
-q1.name = 'Queue 2'
-q1.logs = True
+pr6 = ActorProbe(dl4)
+pr6.name = 'Probe Delay 4'
+dl4.actorprobe = pr6
 
-pr2 = ActorProbe(q1)
-pr2.name = 'Probe Queue 2'
-q1.actorprobe = pr2
+q4 = Queue([dl4])
+q4.name = 'Queue 4'
+q4.logs = True
 
-dl2 = Delay(q1, DELAY_RATE_2.next, None, 1)
-dl2.name = 'Delay 1'
+pr5 = ActorProbe(q4)
+pr5.name = 'Probe Queue 4'
+q4.actorprobe = pr5
+
+########################################################
+
+dl3 = Delay(q4, DELAY_RATE_2.next, None, 0)
+dl3.name = 'Delay 3'
+dl3.logs = True
+
+pr4 = ActorProbe(dl3)
+pr4.name = 'Probe Delay 3'
+dl3.actorprobe = pr4
+
+q3 = Queue([dl3])
+q3.name = 'Queue 3'
+q3.logs = True
+
+pr3 = ActorProbe(q3)
+pr3.name = 'Probe Queue 3'
+q3.actorprobe = pr3
+
+########################################################
+
+dl2 = Delay(q4, DELAY_RATE_3.next, None, 5)
+dl2.name = 'Delay 2'
 dl2.logs = True
 
-pr3 = ActorProbe(dl2)
-pr3.name = 'Probe Delay 1'
-dl2.actorprobe = pr3
+pr2 = ActorProbe(dl2)
+pr2.name = 'Probe Delay 2'
+dl2.actorprobe = pr2
 
 q2 = Queue([dl2])
-q2.name = 'Queue 1'
+q2.name = 'Queue 2'
 q2.logs = True
 
-pr4 = ActorProbe(q2)
-pr4.name = 'Probe Queue 1'
-q2.actorprobe = pr4
+pr1 = ActorProbe(q2)
+pr1.name = 'Probe Queue 2'
+q2.actorprobe = pr1
 
-g1 = AutomaticGenerator(q2, Entity, None, INTERVAL_RATE.next, 1000)
+########################################################
+
+branchFunction = NumberGenerator(RANDINT, a=0, b=1)
+b1 = Branch([q3, q2], branchFunction.next)
+
+g1 = AutomaticGenerator(b1, Entity, None, INTERVAL_RATE.next, 10000)
 g1.logs = True
 
 sim = Simulation()
 sim.logs = True
 
-sim.addactor(d1)
-sim.addactor(dl1)
-sim.addactor(q1)
-sim.addactor(dl2)
-sim.addactor(q2)
 sim.addactor(g1)
+sim.addactor(b1)
+sim.addactor(d1)
+sim.addactor(q2)
+sim.addactor(dl2)
+sim.addactor(q3)
+sim.addactor(dl3)
+sim.addactor(q4)
+sim.addactor(dl4)
 
 sim.addprobe(pr1)
 sim.addprobe(pr2)
 sim.addprobe(pr3)
 sim.addprobe(pr4)
+sim.addprobe(pr5)
+sim.addprobe(pr6)
 
 sim.start()
 
-drawProbs(pr2.calculatestatistics()[1], sim.tick, 'queue 1')
-drawProbs(pr4.calculatestatistics()[1], sim.tick, 'queue 2')
-drawProbs(pr1.calculatestatistics()[1], sim.tick, 'delay 1')
-drawProbs(pr3.calculatestatistics()[1], sim.tick, 'delay 2')
+drawProbs(pr1.calculatestatistics()[1], sim.tick, 'queue 2')
+drawProbs(pr3.calculatestatistics()[1], sim.tick, 'queue 3')
+drawProbs(pr5.calculatestatistics()[1], sim.tick, 'queue 4')
 
-print("Queue 1 Utilization:", pr2.calculatestatistics()[0])
-print("Queue 2 Utilization:", pr4.calculatestatistics()[0])
-print("Delay 1 Utilization:", pr1.calculatestatistics()[0])
-print("Delay 2 Utilization:", pr3.calculatestatistics()[0])
+print("Queue 2 Utilization:", pr1.calculatestatistics()[0])
+print("Queue 3 Utilization:", pr3.calculatestatistics()[0])
+print("Queue 4 Utilization:", pr5.calculatestatistics()[0])
 
