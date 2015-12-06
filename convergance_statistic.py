@@ -2,14 +2,15 @@ import enum
 import turtle
 
 def drawLeaveEnter(list, title):
-    my = 0
-    for i in list:
-        if i > my:
-            my = i
+    number = 3 * 600
+    if len(list) > number:
+        tempList = []
+        step = int(len(list) / number)
+        for i in range(1, number):
+            tmp = list[(i - 1) * step : i * step]
+            tempList.append(sum(tmp) / len(tmp))
 
-    if my == 0:
-        print("empty probe")
-        return
+        list = tempList
 
     length = 400 / len(list)
     maximum = 600 / max(list)
@@ -51,9 +52,31 @@ def drawProbs(list, lastTick, title):
     for i in list:
         if i[-1] > my:
             my = i[-1]
+
     if my == 0:
         print("empty probe")
-        return 
+        return
+
+    number = 3 * 600
+    if len(list) > number:
+        tempList = []
+        step = int(len(list) / number)
+        for i in range(1, number):
+            tmpLst = list[(i - 1) * step : i * step]
+            elem = [0, 0]
+            for i in tmpLst:
+                elem[0] += i[0]
+                if elem[1] < i[1]:
+                    elem[1] = i[1]
+
+                if my < i[1]:
+                    my = i[1]
+
+            elem[0] /= len(tmpLst) * step * 3
+            tempList.append(elem)
+        lastTick = number
+        list = tempList
+
 
     length = 400 / my
     maximum = 600 / lastTick

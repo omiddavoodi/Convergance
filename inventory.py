@@ -104,7 +104,7 @@ e3 = EventGenerator(buyEvent, BUY_INTERVAL.next)
 e3.name = "Buy Event"
 
 sim = Simulation()
-sim.maxtick = 5000
+sim.maxtick = 50000
 sim.logs = True
 
 sim.addactor(d1)
