@@ -19,6 +19,10 @@ STORAGE_CHECK_INTERVAL = 3
 DAY_INTERVAL = 500
 BUY_RATE = NumberGenerator(UNIFORM, a=4, b=12)
 BUY_INTERVAL = NumberGenerator(UNIFORM, a=0, b=30)
+SELL_PRICE = 50
+BUY_PRICE = 35
+RECYCLE_PRICE = 5
+
 
 class Newspaper(Entity):
     def __init__(self, data):
@@ -130,3 +134,6 @@ print("Sold:",len(pr1.enters))
 print("Recycled:",len(pr2.enters))
 print("Lost Opportunity:",len(pr3.failures))
 print("Total Newspapers Generated:",len(pr4.leaves))
+print("Total Revenue:", str(SELL_PRICE * len(pr1.enters) + RECYCLE_PRICE * len(pr2.enters) - BUY_PRICE * len(pr4.leaves)))
+print("Max Possible Revenue:", str ((SELL_PRICE - BUY_PRICE) * (len(pr1.enters) + len(pr3.failures))))
+print("Performance:", str ((SELL_PRICE * len(pr1.enters) + RECYCLE_PRICE * len(pr2.enters) - BUY_PRICE * len(pr4.leaves)) / ((SELL_PRICE - BUY_PRICE) * (len(pr1.enters) + len(pr3.failures)))))

@@ -7,15 +7,18 @@ from convergance_entity import Entity
 from convergance_actor_probe import ActorProbe
 from convergance_actor_branch import Branch
 from convergance_random_number import NORMAL, UNIFORM, RANDINT, TRIANGULAR, NumberGenerator
-from convergance_statistic import drawProbs
+from convergance_statistic import drawProbs, drawLeaveEnter
 
-INTERVAL_RATE = NumberGenerator(UNIFORM, a=1, b=2)
-DELAY_RATE_1 = NumberGenerator(TRIANGULAR, low=5, high=6, mode=9)
-DELAY_RATE_2 = NumberGenerator(UNIFORM, a=1, b=2)
-DELAY_RATE_3 = NumberGenerator(UNIFORM, a=3, b=5)
+INTERVAL_RATE = NumberGenerator(UNIFORM, a=1, b=4)
+DELAY_RATE_3 = NumberGenerator(TRIANGULAR, low=6, high=16, mode=10)
+DELAY_RATE_2 = NumberGenerator(UNIFORM, a=2, b=4)
+DELAY_RATE_1 = NumberGenerator(UNIFORM, a=0, b=4)
+
+MAX_ENTITIES = 100000
 
 d1 = Disposer()
 d1.logs = False
+d1.deleteentityfrommemory = False
 
 ########################################################
 
@@ -26,6 +29,12 @@ dl4.logs = False
 pr6 = ActorProbe(dl4)
 pr6.name = 'Probe Delay 4'
 dl4.actorprobe = pr6
+
+pr7 = ActorProbe(dl4)
+pr7.name = 'Global Probe'
+pr7.calculatenumentities = True
+dl4.actorleaveprobe = pr7
+
 
 q4 = Queue([dl4])
 q4.name = 'Queue 4'
@@ -76,7 +85,9 @@ q2.actorprobe = pr1
 branchFunction = NumberGenerator(RANDINT, a=0, b=1)
 b1 = Branch([q3, q2], branchFunction.next)
 
-g1 = AutomaticGenerator(b1, Entity, None, INTERVAL_RATE.next, 20000)
+b1.actorenterprobe = pr7
+
+g1 = AutomaticGenerator(b1, Entity, None, INTERVAL_RATE.next, MAX_ENTITIES)
 g1.logs = False
 
 sim = Simulation()
@@ -98,14 +109,47 @@ sim.addprobe(pr3)
 sim.addprobe(pr4)
 sim.addprobe(pr5)
 sim.addprobe(pr6)
+sim.addprobe(pr7)
 
 sim.start()
 
-drawProbs(pr1.calculatestatistics()[1], sim.tick, 'queue 2')
-drawProbs(pr3.calculatestatistics()[1], sim.tick, 'queue 3')
-drawProbs(pr5.calculatestatistics()[1], sim.tick, 'queue 4')
+drawProbs(pr1.calculatestatistics()[1], sim.tick, 'Customer Service Queue')
+####drawProbs(pr3.calculatestatistics()[1], sim.tick, 'queue 3')
+drawLeaveEnter(pr4.enters, 'Self Service Enters')
+drawProbs(pr4.calculatestatistics()[1], sim.tick, 'Self Service Timeline')
 
-print("Queue 2 Utilization:", pr1.calculatestatistics()[0])
-print("Queue 3 Utilization:", pr3.calculatestatistics()[0])
-print("Queue 4 Utilization:", pr5.calculatestatistics()[0])
+drawProbs(pr5.calculatestatistics()[1], sim.tick, 'End Queue Timeline')
 
+ne = pr2.calculatestatistics()[1]
+#print(ne)
+numz = 0
+for i in range(1, len(ne)):
+    if (ne[i-1][1] < 5):
+        numz += (ne[i][0] - ne[i-1][0]) * (1 - ne[i][1] / 5)
+if (ne[len(ne)-1][1] < 5):
+    numz += (sim.tick - ne[len(ne)-1][0]) * (1 - ne[len(ne)-1][1] / 5)
+    #print((ne[len(ne)-1][1] / 5))
+utilization = 1 - (numz / sim.tick)
+
+print("Customer Service Utilization:", utilization)
+print("Customer Service Queue Utilization:", pr1.calculatestatistics()[0])
+#print("Queue 3 Utilization:", pr3.calculatestatistics()[0])
+print("End Queue Utilization:", pr5.calculatestatistics()[0])
+print("End Server Utilization:", pr6.calculatestatistics()[0])
+k = 0
+for i in d1.entities:
+    k += i.disposationtick - i.generationick
+
+k = k / len(d1.entities)
+
+print("Average System Time:", k)
+t = pr7.calculatestatistics()[1]
+
+yt = 0
+for i in range(1, len(t)):
+    yt += (t[i][0] - t[i-1][0]) * t[i][1]
+yt /= sim.tick
+
+print("Average Count in System:", yt)
+
+print("Arrival Rate:", MAX_ENTITIES/sim.tick)

@@ -11,18 +11,30 @@ class ActorProbe:
         self.simulation = None
         self.logs = False
         self.name = "Probe1"
+        self.calculatenumentities = False
+        self.numentin = 0
         
     def logenter(self, tick, entity):
         self.enters.append(tick)
         entity.tickenteredactor = tick
-        self.numentities[tick] = len(self.actor.entities)
+        if (self.calculatenumentities):
+            self.numentin += 1
+            self.numentities[tick] = self.numentin
+        else:
+            self.numentities[tick] = len(self.actor.entities)
         if (self.logs):
             print("Logged Enter At " + str(tick) + " for " + self.name + " with len " + str(len(self.actor.entities)))
         
     def logleave(self, tick, entity):
         self.leaves.append(tick)
         self.delays.append(tick - entity.tickenteredactor)
-        self.numentities[tick] = len(self.actor.entities)
+
+        
+        if (self.calculatenumentities):
+            self.numentin -= 1
+            self.numentities[tick] = self.numentin
+        else:
+            self.numentities[tick] = len(self.actor.entities)
         if (self.logs):
             print("Logged Leave At " + str(tick) + " for " + self.name + " with len " + str(len(self.actor.entities)))
 
