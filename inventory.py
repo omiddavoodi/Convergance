@@ -12,11 +12,11 @@ from convergance_statistic import drawProbs, drawLeaveEnter
 
 UNSOLD = 0
 SOLD = 1
-MIN_STORAGE_ENTITIES = 5
-INIT_STORGAE_ENTITIES = 20
-MAX_STORAGE_ENTITIES = 20
-STORAGE_CHECK_INTERVAL = 3
-DAY_INTERVAL = 500
+MIN_STORAGE_ENTITIES = 30
+INIT_STORGAE_ENTITIES = 5
+MAX_STORAGE_ENTITIES = 50
+STORAGE_CHECK_INTERVAL = 10
+DAY_INTERVAL = 5000
 BUY_RATE = NumberGenerator(UNIFORM, a=4, b=12)
 BUY_INTERVAL = NumberGenerator(UNIFORM, a=0, b=30)
 SELL_PRICE = 50
@@ -128,7 +128,7 @@ sim.start()
 
 drawLeaveEnter(pr1.enters, 'Sold')
 drawLeaveEnter(pr2.enters, 'Recycled')
-drawLeaveEnter(pr3.failures, 'Lost Opportunity')
+#drawLeaveEnter(pr3.failures, 'Lost Opportunity')
 #drawLeaveEnter(pr4.leaves, 'Newspapers Generated')
 print("Sold:",len(pr1.enters))
 print("Recycled:",len(pr2.enters))

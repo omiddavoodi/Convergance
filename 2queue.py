@@ -128,12 +128,10 @@ for i in range(1, len(ne)):
         numz += (ne[i][0] - ne[i-1][0]) * (1 - ne[i][1] / 5)
 if (ne[len(ne)-1][1] < 5):
     numz += (sim.tick - ne[len(ne)-1][0]) * (1 - ne[len(ne)-1][1] / 5)
-    #print((ne[len(ne)-1][1] / 5))
 utilization = 1 - (numz / sim.tick)
 
 print("Customer Service Utilization:", utilization)
 print("Customer Service Queue Utilization:", pr1.calculatestatistics()[0])
-#print("Queue 3 Utilization:", pr3.calculatestatistics()[0])
 print("End Queue Utilization:", pr5.calculatestatistics()[0])
 print("End Server Utilization:", pr6.calculatestatistics()[0])
 k = 0
