@@ -2,7 +2,7 @@ import enum
 import turtle
 
 def drawLeaveEnter(list, title):
-    number = 3 * 600
+    number = 600
     if len(list) > number:
         tempList = []
         step = int(len(list) / number)
