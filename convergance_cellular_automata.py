@@ -1,4 +1,6 @@
-import os
+import os, copy, time, random
+
+DELAY = 0.2
 
 class CA:
     def __init__(self, name='CA - 2D', rows=10, columns=10, defaultState=0, log=False, init=None):
@@ -73,10 +75,15 @@ class CA:
             return 0
 
         self.checkForExtend()
+
+        temp = copy.deepcopy(self.map)
+        
         for i in range(self.rows):
             for j in range(self.columns):
-                self.map[i][j] = self.nextGeneration(i, j, self.map)
+                temp[i][j] = self.nextGeneration(i, j, self.map)
 
+        self.map = copy.deepcopy(temp)
+        
         return 1
 
     def draw(self):
@@ -88,10 +95,10 @@ class CA:
         os.system('cls')
         self.draw()
         while True:
-            if input():
-                os.system('cls')
-                self.tick()
-                self.draw()
+            time.sleep(DELAY)
+            os.system('cls')
+            self.tick()
+            self.draw()
 
 
 def conway(i, j, map):
@@ -145,7 +152,10 @@ Beacon = [
             [0, 0, 1, 1],
         ]
 
-myCa = CA('conway game of lime', init=blink, log=False)
+kOmidTest = random.randrange(15,30)
+OmidsTest = [[random.randrange(0,2) for j in range(kOmidTest)] for i in range(random.randrange(15,30))]
+
+myCa = CA('conway game of lime', init=OmidsTest, log=False)
 myCa.setColor({0: '-', 1: 'X'})
 myCa.setNextGeneration(conway)
 myCa.runInConsole()
