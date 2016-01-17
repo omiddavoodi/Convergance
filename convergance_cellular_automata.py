@@ -1,13 +1,15 @@
 import os, copy, time
 
 class CA2D:
-    def __init__(self, name='CA - 2D', rows=10, columns=10, defaultState=0, log=False, init=None, delay=0.2):
+    def __init__(self, name='CA - 2D', rows=10, columns=10, defaultState=0, 
+                    log=False, init=None, delay=0.2, disp=None):
         self.nextGeneration = None
         self.states = {}
         self.name = name
         self.defaultState = defaultState
         self.log = log
         self.delay = delay
+        self.disp = disp
         if init is None:
             self.rows = rows
             self.columns = columns
@@ -26,6 +28,9 @@ class CA2D:
 
     def getMap(self):
         return self.map
+
+    def setDisplay(self, disp):
+        self.disp = disp
 
     def checkForExtend(self):
         for i in range(self.rows):
@@ -90,11 +95,18 @@ class CA2D:
     def runInConsole(self):
         os.system('cls')
         self.draw()
+
+    def run(self, ticks=None):
+        i = 0
         while True:
-            time.sleep(self.delay)
-            os.system('cls')
+            if ticks is not None:
+                if i > ticks:
+                    break
+                i += 1
+
             self.tick()
-            self.draw()
+            self.runInConsole() if self.disp is None else self.disp(self.map)
+            time.sleep(self.delay)
 
 
 class CA1D:

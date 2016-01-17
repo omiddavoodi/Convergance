@@ -1,6 +1,32 @@
 import enum
 import turtle
 
+class CA2DDisplay:
+    def __init__(self, colors=None, name=None):
+        self.colors = colors or {}
+        self.name = name
+        self.initTurtle()
+
+    def initTurtle(self):
+        self.t = turtle.Turtle()
+        turtle.delay(0)
+        self.t.speed(0)
+        self.t.hideturtle()
+        self.t.pu()
+
+    def draw(self, map):
+        self.t.clear()
+        wstep = 400 / len(map[0])
+        hstep = 600 / len(map)
+        size = min(wstep, hstep)
+        self.t.pensize(300 / size)
+        for i in range(len(map)):
+            for j in range(len(map[i])):
+                self.t.pencolor(self.colors.get(map[i][j], 'black'))
+                self.t.goto(i * hstep - 300, j * wstep - 200)
+                self.t.dot()
+
+
 def drawLeaveEnter(list, title):
     number = 600
     if len(list) > number:

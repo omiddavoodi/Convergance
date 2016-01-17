@@ -1,3 +1,4 @@
+from convergance_statistic import CA2DDisplay
 from convergance_cellular_automata import CA2D
 import random
 
@@ -47,10 +48,14 @@ Beacon = [
             [0, 0, 1, 1],
         ]
 
-kOmidTest = random.randrange(15,30)
+kOmidTest = random.randrange(15, 30)
 OmidsTest = [[random.randrange(0,2) for j in range(kOmidTest)] for i in range(random.randrange(15,30))]
 
-myCa = CA2D('conway game of lime', init=OmidsTest, log=False, delay=0.1)
-myCa.setColor({0: ' ', 1: 'X'})
+colors = {0: 'black', 1: 'red'}
+myCa = CA2D('conway game of life', init=Pentadecathlon, log=False, delay=1)
+myCa.setColor(colors)
 myCa.setNextGeneration(conway)
-myCa.runInConsole()
+
+myCaDisplay = CA2DDisplay(name=myCa.name, colors=colors)
+myCa.setDisplay(myCaDisplay.draw)
+myCa.run(500)

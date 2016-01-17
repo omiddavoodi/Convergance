@@ -64,7 +64,7 @@ def generatorBatchNumberFunction(simulation):
     global batchCount
     return batchCount
 
-g1 = Generator(s1, Newspaper, None,0, True, generatorBatchNumberFunction)
+g1 = Generator(s1, Newspaper, None, 0, True, generatorBatchNumberFunction)
 pr4 = ActorProbe(g1)
 pr4.name = 'Generator Probe'
 g1.actorprobe = pr4
