@@ -25,7 +25,7 @@ class Generator(Actor):
             if (self.maxentities == 0 or (self.entitiescreated < self.maxentities)):
                 self.entitiescreated += 1
                 ent = self.entitytype(self.entitycreationdata)
-                ent.generate(self.simulation.tick)
+                ent.generate(self.simulation.tick, self.simulation)
                 if (self.logs):
                     print(self.name + ": Created Entity at Tick:" + str(self.simulation.tick))
                 

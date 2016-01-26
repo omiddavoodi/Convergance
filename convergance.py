@@ -1,16 +1,18 @@
 from convergance_event_manager import EventManager
 
 class Simulation:
-    tick = 0
-    maxtick = 0
-    eventmanager = EventManager()
-    error = False
-    finished = False
-    actors = []
-    logs = False
+    
     
     def __init__(self):
-        pass
+        self.tick = 0
+        self.maxtick = 0
+        self.eventmanager = EventManager()
+        self.messages = []
+        self.error = False
+        self.finished = False
+        self.actors = []
+        self.agents = []
+        self.logs = False
 
     def start(self):
         if (self.logs):
@@ -30,6 +32,14 @@ class Simulation:
             print("Simulation finished: " + str(self.tick))
 
     def loop(self):
+        for i in self.messages:
+            if i[2] is None:
+                for j in agents:
+                    j.onMessage(i[0], i[1])
+            else:
+                i[2].onMessage(i[0], i[1])
+        self.messages.clear()
+        
         #print('loop')
         event = self.eventmanager.getevent()
         if event == None:
@@ -45,6 +55,13 @@ class Simulation:
     def addactor(self, actor):
         self.actors.append(actor)
         actor.simulation = self
+
+    def addagent(self, agent):
+        self.agents.append(agent)
+        agent.simulation = self
     
     def addprobe(self, probe):
         probe.simulation = self
+
+    def addmessage(self, m):
+        self.messages.append(m)
